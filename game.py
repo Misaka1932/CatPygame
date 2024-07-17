@@ -16,7 +16,11 @@ game.resizable(0,0)
 
 
 pygame.mixer.init() #初始化混音器模块, 用于加载和播放声音
-background = PhotoImage(file='bg.png') #设置背景图
+
+current_file = os.path.abspath(__file__) #当前代码文件
+current_path = os.path.dirname(current_file) + '\\' #当前代码文件所在文件夹路径
+print(current_path)
+background = PhotoImage(file=current_path+'bg.png') #设置背景图
 #pygame.mixer.music.load('bgm.mp3')     #设置bgm
 #pygame.mixer.music.set_volume(0.1)     #设置bgm音量
 
