@@ -13,15 +13,13 @@ game = Tk()
 game.geometry('1280x720+120+50') 
 game.title('小游戏')
 game.resizable(0,0)
-game["bg"] = "pink" #游戏的bg(纯色)
-game.attributes("-alpha",0.95) #游戏的背景透明度
 
-''' 还不会pygame 有空再研究喵
+
 pygame.mixer.init() #初始化混音器模块, 用于加载和播放声音
 background = PhotoImage(file='bg.png') #设置背景图
-pygame.mixer.music.load('bgm.mp3')     #设置bgm
-pygame.mixer.music.set_volume(0.1)     #设置bgm音量
-'''
+#pygame.mixer.music.load('bgm.mp3')     #设置bgm
+#pygame.mixer.music.set_volume(0.1)     #设置bgm音量
+
 
 class game_system:
     def __init__(self): #定义必要变量
@@ -87,10 +85,53 @@ class game_system:
         self.load_data()
         #print(self.load_global_system())
         #print(self.load_data())
-        self.game_gui()
+        self.game_start_gui() #启动游戏初始界面
 
-    def game_gui(self): #启动游戏界面
+    # ---------- ↓ 启动游戏初始界面 ↓ ---------- #
+    def game_start_gui(self): 
+        self.game1.place(width=1280, height=720)
+        self.canvas.place(width=1280, height=720)
+        self.canvas.create_image(650, 330, image=background)
+
+        self.New_Game1 = Frame(self.game1)  #设置new game外框的位置
+        self.New_Game1.place(width=300, height=100, x=900, y=250)
+        self.New_Game_Label1 = Label(self.New_Game1, bg='black')
+        self.New_Game_Label1.place(width=300, height=100, x=0, y=0)
+        self.New_Game_Label2 = Label(self.New_Game1, bg='grey')
+        self.New_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
+        self.New_Game_Button = Button(self.New_Game1, text='New Game', 
+            font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.new_game_gui)
+        self.New_Game_Button.place(width=200, height=50, x=50, y=25)
+
+        self.New_Game1 = Frame(self.game1)  #设置load game外框的位置
+        self.New_Game1.place(width=300, height=100, x=900, y=400)
+        self.New_Game_Label1 = Label(self.New_Game1, bg='black')
+        self.New_Game_Label1.place(width=300, height=100, x=0, y=0)
+        self.New_Game_Label2 = Label(self.New_Game1, bg='grey')
+        self.New_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
+        self.New_Game_Button = Button(self.New_Game1, text='Load Game', 
+            font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.load_data)
+        self.New_Game_Button.place(width=200, height=50, x=50, y=25)
+
+        self.New_Game1 = Frame(self.game1)  #设置exit外框的位置
+        self.New_Game1.place(width=300, height=100, x=900, y=550)
+        self.New_Game_Label1 = Label(self.New_Game1, bg='black')
+        self.New_Game_Label1.place(width=300, height=100, x=0, y=0)
+        self.New_Game_Label2 = Label(self.New_Game1, bg='grey')
+        self.New_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
+        self.New_Game_Button = Button(self.New_Game1, text='Exit', 
+            font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.game_exit)
+        self.New_Game_Button.place(width=200, height=50, x=50, y=25)
+        
+    # ---------- ↑ 启动游戏初始界面 ↑ ---------- #
+
+    def new_game_gui(self):
         print('wip')
+    
+    def game_exit(self):
+        Game_Exit = messagebox.askyesno(title='再见', message='真的要离开嘛? o(TヘTo)')
+        if Game_Exit:
+            exit()
 
     # ---------- ↓ 游戏的储存和读取 ↓ ---------- #
     def save_global_system(self):   #保存游戏系统状态
@@ -138,6 +179,11 @@ class game_system:
             print(f"加载存档时发生错误: {e}")
             return None
     # ---------- ↑ 游戏的储存和读取 ↑ ---------- #
+
+    # ---------- ↓ 加载金币和更新 ↓ ---------- #
+    def update_coins(self):
+        print('wip')
+    # ---------- ↑ 加载金币和更新 ↑ ---------- #
         
 game_system()
 game.mainloop()
