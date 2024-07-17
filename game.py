@@ -103,25 +103,25 @@ class game_system:
             font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.new_game_gui)
         self.New_Game_Button.place(width=200, height=50, x=50, y=25)
 
-        self.New_Game1 = Frame(self.game1)  #设置load game外框的位置
-        self.New_Game1.place(width=300, height=100, x=900, y=400)
-        self.New_Game_Label1 = Label(self.New_Game1, bg='black')
-        self.New_Game_Label1.place(width=300, height=100, x=0, y=0)
-        self.New_Game_Label2 = Label(self.New_Game1, bg='grey')
-        self.New_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
-        self.New_Game_Button = Button(self.New_Game1, text='Load Game', 
+        self.Load_Game1 = Frame(self.game1)  #设置load game外框的位置
+        self.Load_Game1.place(width=300, height=100, x=900, y=400)
+        self.Load_Game_Label1 = Label(self.Load_Game1, bg='black')
+        self.Load_Game_Label1.place(width=300, height=100, x=0, y=0)
+        self.Load_Game_Label2 = Label(self.Load_Game1, bg='grey')
+        self.Load_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
+        self.Load_Game_Button = Button(self.Load_Game1, text='Load Game', 
             font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.load_data)
-        self.New_Game_Button.place(width=200, height=50, x=50, y=25)
+        self.Load_Game_Button.place(width=200, height=50, x=50, y=25)
 
-        self.New_Game1 = Frame(self.game1)  #设置exit外框的位置
-        self.New_Game1.place(width=300, height=100, x=900, y=550)
-        self.New_Game_Label1 = Label(self.New_Game1, bg='black')
-        self.New_Game_Label1.place(width=300, height=100, x=0, y=0)
-        self.New_Game_Label2 = Label(self.New_Game1, bg='grey')
-        self.New_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
-        self.New_Game_Button = Button(self.New_Game1, text='Exit', 
+        self.Exit_Game1 = Frame(self.game1)  #设置exit外框的位置
+        self.Exit_Game1.place(width=300, height=100, x=900, y=550)
+        self.Exit_Game_Label1 = Label(self.Exit_Game1, bg='black')
+        self.Exit_Game_Label1.place(width=300, height=100, x=0, y=0)
+        self.Exit_Game_Label2 = Label(self.Exit_Game1, bg='grey')
+        self.Exit_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
+        self.Exit_Game_Button = Button(self.Exit_Game1, text='Exit', 
             font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.game_exit)
-        self.New_Game_Button.place(width=200, height=50, x=50, y=25)
+        self.Exit_Game_Button.place(width=200, height=50, x=50, y=25)
         
     # ---------- ↑ 启动游戏初始界面 ↑ ---------- #
 
