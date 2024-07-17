@@ -16,11 +16,6 @@ game.resizable(0,0)
 game["bg"] = "pink" #游戏的bg(纯色)
 game.attributes("-alpha",0.95) #游戏的背景透明度
 
-Save_File_Global = 'global.json'
-system_state = {            #定义游戏状态字典
-    'savedata_count': 0
-}
-
 ''' 还不会pygame 有空再研究喵
 pygame.mixer.init() #初始化混音器模块, 用于加载和播放声音
 background = PhotoImage(file='bg.png') #设置背景图
@@ -36,9 +31,22 @@ class game_system:
         self.canvas = Canvas(self.game1)
         self.px = 1280
         self.py = 720
+        self.Save_File_Global = 'global.json'
+        self.Save_File_Game =''
+        self.system_state = {            #定义游戏状态字典
+            'savedata_count': 1
+        }
         # ---------- ↑ 系统变量 ↑ ---------- #
 
         # ---------- ↓ 游戏变量 ↓ ---------- #
+        self.game_state = {              #定义游戏数值字典
+            'user_name'   : '',
+            'user_lv'     : 0,
+            'user_coins'  : 0,
+            'user_angels' : 0,
+            'angel_lv'    : [0, 0, 0, 0, 0]
+        }
+
         self.User_Name = ''
         self.User_lv = 0
         self.Uplevel_User_Coins = [1000, 3000, 6000, 10000, 15000] #升级主人的所需金币 (默认LV0)
@@ -70,12 +78,15 @@ class game_system:
         # LV15 - 19 每级800币  该属性战力值加成40%
         # LV20      每级1600币 该属性战力值加成60%
         # 水属性所需金币不变，火属性每级+10%, 木属性每级+20%, 暗属性每级+30%, 光属性每级+50%
-
+        self.Angel_lv = [0, 0, 0, 0, 0]
         self.User_Weapon = 'wip'
         #用户武器同上，先不写吧太复杂了感觉
         # ---------- ↑ 游戏变量 ↑ ---------- #
 
         self.load_global_system()
+        self.load_data()
+        print(self.load_global_system())
+        print(self.load_data())
         self.game_gui()
 
     def game_gui(self): #启动游戏界面
@@ -84,28 +95,48 @@ class game_system:
     # ---------- ↓ 游戏的储存和读取 ↓ ---------- #
     def save_global_system(self):   #保存游戏系统状态
         try:
-            with open(Save_File_Global, 'w') as f:
-                json.dump(system_state, f)
-                print("游戏已保存。")
+            with open(self.Save_File_Global, 'w') as f:
+                json.dump(self.system_state, f)
         except Exception as e:
             print(f"保存游戏时发生错误: {e}")
 
     def load_global_system(self):   #读取游戏系统状态
         try:
-            with open(Save_File_Global, 'r') as f:
+            with open(self.Save_File_Global, 'r') as f:
                 state = json.load(f)
-                print("游戏已加载。")
                 return state
         except FileNotFoundError:
-            print("未找到存档文件，创建新游戏。")
+            self.save_global_system()
             return None
         except Exception as e:
-            print(f"加载游戏时发生错误: {e}")
+            print(f"加载存档时发生错误: {e}")
             return None
 
     def save_data(self): #保存游戏存档
-        SAVE_FILE = 'savedata' + '.json'
+        self.Save_File_Game = 'savedata' + str(self.system_state['savedata_count']) + '.json'
+        #self.system_state['savedata_count'] += 1  这里还不能写，不然每次save都要+1
+        self.game_state['user_name']   = self.User_Name
+        self.game_state['user_lv']     = self.User_lv
+        self.game_state['user_coins']  = self.User_Coins
+        self.game_state['user_angels'] = self.User_Angels
+        self.game_state['angel_lv']    = self.Angel_lv
+        try:
+            with open(self.Save_File_Game, 'w') as f:
+                json.dump(self.game_state, f)
+        except Exception as e:
+            print(f"保存游戏时发生错误: {e}")
 
+    def load_data(self):   #读取游戏系统状态
+        try:
+            with open(self.Save_File_Game, 'r') as f:
+                state = json.load(f)
+                return state
+        except FileNotFoundError:
+            self.save_data()
+            return None
+        except Exception as e:
+            print(f"加载存档时发生错误: {e}")
+            return None
     # ---------- ↑ 游戏的储存和读取 ↑ ---------- #
         
 game_system()
