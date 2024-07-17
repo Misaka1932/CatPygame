@@ -85,8 +85,8 @@ class game_system:
 
         self.load_global_system()
         self.load_data()
-        print(self.load_global_system())
-        print(self.load_data())
+        #print(self.load_global_system())
+        #print(self.load_data())
         self.game_gui()
 
     def game_gui(self): #启动游戏界面
