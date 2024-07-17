@@ -16,10 +16,7 @@ game.resizable(0,0)
 game["bg"] = "pink" #游戏的bg(纯色)
 game.attributes("-alpha",0.95) #游戏的背景透明度
 
-Save_File_Global = 'global.json'
-system_state = {            #定义游戏状态字典
-    'savedata_count': 0
-}
+
 
 ''' 还不会pygame 有空再研究喵
 pygame.mixer.init() #初始化混音器模块, 用于加载和播放声音
@@ -36,6 +33,10 @@ class game_system:
         self.canvas = Canvas(self.game1)
         self.px = 1280
         self.py = 720
+        self.Save_File_Global = 'global.json'
+        self.system_state = {            #定义游戏状态字典
+            'savedata_count': 0
+        }
         # ---------- ↑ 系统变量 ↑ ---------- #
 
         # ---------- ↓ 游戏变量 ↓ ---------- #
@@ -84,15 +85,15 @@ class game_system:
     # ---------- ↓ 游戏的储存和读取 ↓ ---------- #
     def save_global_system(self):   #保存游戏系统状态
         try:
-            with open(Save_File_Global, 'w') as f:
-                json.dump(system_state, f)
+            with open(self.Save_File_Global, 'w') as f:
+                json.dump(self.system_state, f)
                 print("游戏已保存。")
         except Exception as e:
             print(f"保存游戏时发生错误: {e}")
 
     def load_global_system(self):   #读取游戏系统状态
         try:
-            with open(Save_File_Global, 'r') as f:
+            with open(self.Save_File_Global, 'r') as f:
                 state = json.load(f)
                 print("游戏已加载。")
                 return state
