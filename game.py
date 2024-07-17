@@ -1,12 +1,12 @@
 from tkinter import *
-from random import *
 from tkinter import messagebox  # 修复messagebox的bug
 import time
 import math
 import sys
 import ctypes
 from datetime import datetime
-import pickle
+import json
+import os
 import pygame
 
 game = Tk()
@@ -15,6 +15,11 @@ game.title('小游戏')
 game.resizable(0,0)
 game["bg"] = "pink" #游戏的bg(纯色)
 game.attributes("-alpha",0.95) #游戏的背景透明度
+
+Save_File_Global = 'global.json'
+system_state = {            #定义游戏状态字典
+    'savedata_count': 0
+}
 
 ''' 还不会pygame 有空再研究喵
 pygame.mixer.init() #初始化混音器模块, 用于加载和播放声音
@@ -74,6 +79,34 @@ class game_system:
 
     def game_gui(self): #启动游戏界面
         print('wip')
+
+    # ---------- ↓ 游戏的储存和读取 ↓ ---------- #
+    def save_global_system(self):   #保存游戏系统状态
+        
+        try:
+            with open(Save_File_Global, 'w') as f:
+                json.dump(system_state, f)
+                print("游戏已保存。")
+        except Exception as e:
+            print(f"保存游戏时发生错误: {e}")
+
+    def load_global_system(self):   #读取游戏系统状态
+        try:
+            with open(Save_File_Global, 'r') as f:
+                state = json.load(f)
+                print("游戏已加载。")
+                return state
+        except FileNotFoundError:
+            print("未找到存档文件，创建新游戏。")
+            return None
+        except Exception as e:
+            print(f"加载游戏时发生错误: {e}")
+            return None
+
+    def save_data(self): #保存游戏存档
+        SAVE_FILE = 'savedata' + '.json'
+
+    # ---------- ↑ 游戏的储存和读取 ↑ ---------- #
         
 game_system()
 game.mainloop()
