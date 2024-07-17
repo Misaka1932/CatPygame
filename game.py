@@ -75,6 +75,7 @@ class game_system:
         #用户武器同上，先不写吧太复杂了感觉
         # ---------- ↑ 游戏变量 ↑ ---------- #
 
+        self.load_global_system()
         self.game_gui()
 
     def game_gui(self): #启动游戏界面
@@ -82,7 +83,6 @@ class game_system:
 
     # ---------- ↓ 游戏的储存和读取 ↓ ---------- #
     def save_global_system(self):   #保存游戏系统状态
-        
         try:
             with open(Save_File_Global, 'w') as f:
                 json.dump(system_state, f)
