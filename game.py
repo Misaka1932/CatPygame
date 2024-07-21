@@ -14,16 +14,15 @@ game.geometry('1280x720+120+50')
 game.title('小游戏')
 game.resizable(0,0)
 
-
 pygame.mixer.init() #初始化混音器模块, 用于加载和播放声音
 
 current_file = os.path.abspath(__file__) #当前代码文件
 current_path = os.path.dirname(current_file) + '\\' #当前代码文件所在文件夹路径
-print(current_path)
-background = PhotoImage(file=current_path+'bg.png') #设置背景图
-#pygame.mixer.music.load('bgm.mp3')     #设置bgm
-#pygame.mixer.music.set_volume(0.1)     #设置bgm音量
-
+#print(current_path)
+#background = PhotoImage(file=current_path + 'bg.png')  #设置背景图
+pygame.mixer.music.load(current_path + 'bgm.mp3')      #设置bgm
+pygame.mixer.music.set_volume(0.1)                   #设置bgm音量 (值为0-1)
+pygame.mixer.music.play()
 
 class game_system:
     def __init__(self): #定义必要变量
@@ -95,7 +94,7 @@ class game_system:
     def game_start_gui(self): 
         self.game1.place(width=1280, height=720)
         self.canvas.place(width=1280, height=720)
-        self.canvas.create_image(650, 330, image=background)
+        #self.canvas.create_image(650, 650, image=background)
 
         self.New_Game1 = Frame(self.game1)  #设置new game外框的位置
         self.New_Game1.place(width=300, height=100, x=900, y=250)
@@ -108,7 +107,7 @@ class game_system:
         self.New_Game_Button.place(width=200, height=50, x=50, y=25)
 
         self.Load_Game1 = Frame(self.game1)  #设置load game外框的位置
-        self.Load_Game1.place(width=300, height=100, x=900, y=400)
+        self.Load_Game1.place(width=300, height=100, x=750, y=400)
         self.Load_Game_Label1 = Label(self.Load_Game1, bg='black')
         self.Load_Game_Label1.place(width=300, height=100, x=0, y=0)
         self.Load_Game_Label2 = Label(self.Load_Game1, bg='grey')
@@ -117,20 +116,29 @@ class game_system:
             font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.load_data)
         self.Load_Game_Button.place(width=200, height=50, x=50, y=25)
 
-        self.Exit_Game1 = Frame(self.game1)  #设置exit外框的位置
-        self.Exit_Game1.place(width=300, height=100, x=900, y=550)
-        self.Exit_Game_Label1 = Label(self.Exit_Game1, bg='black')
-        self.Exit_Game_Label1.place(width=300, height=100, x=0, y=0)
-        self.Exit_Game_Label2 = Label(self.Exit_Game1, bg='grey')
-        self.Exit_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
-        self.Exit_Game_Button = Button(self.Exit_Game1, text='Exit', 
+        self.Options_Game1 = Frame(self.game1)  #设置options外框的位置
+        self.Options_Game1.place(width=300, height=100, x=600, y=550)
+        self.Options_Game_Label1 = Label(self.Options_Game1, bg='black')
+        self.Options_Game_Label1.place(width=300, height=100, x=0, y=0)
+        self.Options_Game_Label2 = Label(self.Options_Game1, bg='grey')
+        self.Options_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
+        self.Options_Game_Button = Button(self.Options_Game1, text='Options', 
+            font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.load_data)
+        self.Options_Game_Button.place(width=200, height=50, x=50, y=25)
+
+        self.Exit_Game_Circle = self.canvas.create_oval(1050, 520, 1200, 670, fill="gray", width=2)
+        self.Exit_Game_Button = Button(text='Exit', 
             font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.game_exit)
-        self.Exit_Game_Button.place(width=200, height=50, x=50, y=25)
+        self.Exit_Game_Button.place(width=100, height=50, x=1075, y=570)
         
     # ---------- ↑ 启动游戏初始界面 ↑ ---------- #
 
     def new_game_gui(self):
-        print('wip')
+        self.New_Game1.destroy()
+        self.Load_Game1.destroy()
+        self.Options_Game1.destroy()
+        self.canvas.delete(self.Exit_Game_Circle)
+        self.Exit_Game_Button.destroy()
     
     def game_exit(self):
         Game_Exit = messagebox.askyesno(title='再见', message='真的要离开嘛? o(TヘTo)')
