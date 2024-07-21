@@ -47,6 +47,8 @@ class game_system:
             'user_angels' : 0,
             'angel_lv'    : [0, 0, 0, 0, 0]
         }
+        #游戏运行状态
+        self.game_running_state = 'title'
 
         self.User_Name = ''
         self.User_lv = 0
@@ -57,6 +59,9 @@ class game_system:
         #LV10 - 14 : 每级6000 币  每秒打工产出金币加成30% / 全属性战力值加成30%
         #LV15 - 19 : 每级10000币  每秒打工产出金币加成40% / 全属性战力值加成40%
         #LV20      : 每级15000币  每秒打工产出金币加成60% / 全属性战力值加成60%
+        self.coin_round = 0 #int(self.User_lv / 5)
+        self.add_coin_buff = 0 #每秒打工产出金币加成初始为0%
+        self.POW_buff = 0 #全属性战力值加成初始为0%
 
         self.User_Coins = 0
         self.Coins_per_second = 10 #默认打工每秒产出金币10个 如果太慢可以修改试试
@@ -129,7 +134,8 @@ class game_system:
         self.Exit_Game_Circle = self.canvas.create_oval(1050, 520, 1200, 670, fill="gray", width=2)
         self.Exit_Game_Button = Button(text='Exit', 
             font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.game_exit)
-        self.Exit_Game_Button.place(width=100, height=50, x=1075, y=570)
+        self.Exit_Game_Button.place(width=100, height=50, x=1075, y=570) 
+
         
     # ---------- ↑ 启动游戏初始界面 ↑ ---------- #
 
@@ -139,6 +145,9 @@ class game_system:
         self.Options_Game1.destroy()
         self.canvas.delete(self.Exit_Game_Circle)
         self.Exit_Game_Button.destroy()
+
+        self.game_running_state = 'running'
+        game.after(1000,self.game_run)
     
     def game_exit(self):
         Game_Exit = messagebox.askyesno(title='再见', message='真的要离开嘛? o(TヘTo)')
@@ -194,8 +203,29 @@ class game_system:
 
     # ---------- ↓ 加载金币和更新 ↓ ---------- #
     def update_coins(self):
-        print('wip')
+        self.User_Coins += int(self.Coins_per_second * (1.0 + self.add_coin_buff / 100))
+        print(self.User_Coins)
+        #print('wip')
     # ---------- ↑ 加载金币和更新 ↑ ---------- #
+    
+    # ---------- ↓ 角色升级 ↓ ---------- #
+    def User_lv_up(self):
+        self.User_lv += 1
+        self.coin_round = int(self.User_lv / 5)
+        self.val_buff = [0,10,20,30,40,60] 
+        self.add_coin_buff = self.val_buff[self.coin_round] 
+        self.POW_buff = self.val_buff[self.coin_round] 
+        print('升级成功！')
+
+    # ---------- ↑ 角色升级 ↑ ---------- #
+    
+    # ---------- ↓ 游戏每帧的运行事件 ↓ ---------- #
+    def game_run(self):
+        if self.game_running_state != 'running': return
+        self.update_coins()
+        game.after(1000,Game.game_run)
+
+    # ---------- ↑ 游戏每帧的运行事件 ↑ ---------- #
         
-game_system()
+Game = game_system()
 game.mainloop()
