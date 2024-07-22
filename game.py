@@ -9,6 +9,20 @@ import json
 import os
 import pygame
 
+'''
+—————————————————————————————————————————————————————————————————
+| Options                                             Name      |
+|                                                     Coins     |
+| Angel1 Lv.1                                         Lv.1      |
+| Angel2 Lv.1                                                   |
+| Angel3 Lv.1               CG                                  |
+| Angel4 Lv.1                                                   |
+| Angel5 Lv.1                                                   |
+|                                                               |
+|                                                               |
+—————————————————————————————————————————————————————————————————
+'''
+
 game = Tk()
 game.geometry('1280x720+120+50') 
 game.title('小游戏')
@@ -20,9 +34,9 @@ current_file = os.path.abspath(__file__) #当前代码文件
 current_path = os.path.dirname(current_file) + '\\' #当前代码文件所在文件夹路径
 #print(current_path)
 #background = PhotoImage(file=current_path + 'bg.png')  #设置背景图
-pygame.mixer.music.load(current_path + 'bgm.mp3')      #设置bgm
-pygame.mixer.music.set_volume(0.1)                   #设置bgm音量 (值为0-1)
-pygame.mixer.music.play()
+#pygame.mixer.music.load(current_path + 'bgm.mp3')      #设置bgm
+#pygame.mixer.music.set_volume(0.1)                   #设置bgm音量 (值为0-1)
+#pygame.mixer.music.play()
 
 class game_system:
     def __init__(self): #定义必要变量
@@ -47,8 +61,8 @@ class game_system:
             'user_angels' : 0,
             'angel_lv'    : [0, 0, 0, 0, 0]
         }
-        #游戏运行状态
-        self.game_running_state = 'title'
+        #金币增加状态
+        self.coins_running_state = 'title'
 
         self.User_Name = ''
         self.User_lv = 0
@@ -128,7 +142,7 @@ class game_system:
         self.Options_Game_Label2 = Label(self.Options_Game1, bg='grey')
         self.Options_Game_Label2.place(width=296, height=96, x=2, y=2) #留了2x2的黑边
         self.Options_Game_Button = Button(self.Options_Game1, text='Options', 
-            font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.load_data)
+            font=('consolas', 20), bg='grey', fg='white', bd=0, command=self.load_data) #options还没写
         self.Options_Game_Button.place(width=200, height=50, x=50, y=25)
 
         self.Exit_Game_Circle = self.canvas.create_oval(1050, 520, 1200, 670, fill="gray", width=2)
@@ -146,9 +160,38 @@ class game_system:
         self.canvas.delete(self.Exit_Game_Circle)
         self.Exit_Game_Button.destroy()
 
-        self.game_running_state = 'running'
-        game.after(1000,self.game_run)
+        # ---------- ↓ 新窗口读取用户名 ↓ ---------- #
+        self.window_askname = Toplevel(game)
+        self.window_askname.geometry('300x100+600+300')
+        self.window_askname.title('Test')
+        self.new_name = StringVar()
+        self.new_name.set('输入名字喵')
+        Label(self.window_askname, text='你的名字是：').place(x=20, y=20)
+        entry_new_name = Entry(self.window_askname, textvariable=self.new_name)
+        entry_new_name.place(x=100, y=20)
+        button_comfirm = Button(self.window_askname, text='确定', command=self.game_run)
+        button_comfirm.place(x=130, y=60)
+        # ---------- ↑ 新窗口读取用户名 ↑ ---------- #
     
+    def game_run(self):
+        self.User_Name = self.new_name.get()
+        self.window_askname.destroy()
+
+        self.Name_Frame = Frame(self.game1)  #设置name的位置
+        self.Name_Frame.place(width=200, height=50, x=1050, y=30)
+        self.Name_Label = Label(self.Name_Frame, text=self.User_Name, font=('楷体', 18))
+        self.Name_Label.place(width=150, height=30, x=0, y=20)
+        self.Lv_Label = Label(self.Name_Frame, text='Lv.' + str(self.User_lv), font=('Consolas', 13))
+        self.Lv_Label.place(width=50, height=20, x=130, y=0)
+        #self.Coins_Label.config(anchor=W)  #左对齐W 右对齐E 居中默认或者CENTER
+
+        self.Coins_Frame = Frame(self.game1)  #设置coins的位置
+        self.Coins_Frame.place(width=160, height=50, x=1050, y=90)
+        self.Coins_Label = Label(self.Coins_Frame, text='Coins: ' + str(self.User_Coins), font=('Consolas', 15))
+        self.Coins_Label.place(width=160, height=50, x=0, y=0)
+        self.coins_running_state = 'running'
+        game.after(1000, self.coins_run)
+
     def game_exit(self):
         Game_Exit = messagebox.askyesno(title='再见', message='真的要离开嘛? o(TヘTo)')
         if Game_Exit:
@@ -220,11 +263,11 @@ class game_system:
     # ---------- ↑ 角色升级 ↑ ---------- #
     
     # ---------- ↓ 游戏每帧的运行事件 ↓ ---------- #
-    def game_run(self):
-        if self.game_running_state != 'running': return
+    def coins_run(self):
+        if self.coins_running_state != 'running': return
         self.update_coins()
-        game.after(1000,Game.game_run)
-
+        game.after(100,Game.coins_run)
+        print(self.User_Coins)
     # ---------- ↑ 游戏每帧的运行事件 ↑ ---------- #
         
 Game = game_system()
