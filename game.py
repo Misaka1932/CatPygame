@@ -163,7 +163,7 @@ class game_system:
         # ---------- ↓ 新窗口读取用户名 ↓ ---------- #
         self.window_askname = Toplevel(game)
         self.window_askname.geometry('300x100+600+300')
-        self.window_askname.title('Test')
+        self.window_askname.title('这是一个窗口')
         self.new_name = StringVar()
         self.new_name.set('输入名字喵')
         Label(self.window_askname, text='你的名字是：').place(x=20, y=20)
@@ -178,7 +178,7 @@ class game_system:
         self.window_askname.destroy()
 
         self.Name_Frame = Frame(self.game1)  #设置name的位置
-        self.Name_Frame.place(width=200, height=50, x=1050, y=30)
+        self.Name_Frame.place(width=200, height=50, x=20, y=20)
         self.Name_Label = Label(self.Name_Frame, text=self.User_Name, font=('楷体', 18))
         self.Name_Label.place(width=150, height=30, x=0, y=20)
         self.Lv_Label = Label(self.Name_Frame, text='Lv.' + str(self.User_lv), font=('Consolas', 13))
@@ -186,11 +186,12 @@ class game_system:
         #self.Coins_Label.config(anchor=W)  #左对齐W 右对齐E 居中默认或者CENTER
 
         self.Coins_Frame = Frame(self.game1)  #设置coins的位置
-        self.Coins_Frame.place(width=160, height=50, x=1050, y=90)
-        self.Coins_Label = Label(self.Coins_Frame, text='Coins: ' + str(self.User_Coins), font=('Consolas', 15))
+        self.Coins_Frame.place(width=160, height=50, x=20, y=70)
+        self.Coins_Label = Label(self.Coins_Frame, text='金币：' + str(self.User_Coins), font=('Consolas', 15))
         self.Coins_Label.place(width=160, height=50, x=0, y=0)
+
         self.coins_running_state = 'running'
-        game.after(1000, self.coins_run)
+        self.coins_run()
 
     def game_exit(self):
         Game_Exit = messagebox.askyesno(title='再见', message='真的要离开嘛? o(TヘTo)')
@@ -248,6 +249,8 @@ class game_system:
     def update_coins(self):
         self.User_Coins += int(self.Coins_per_second * (1.0 + self.add_coin_buff / 100))
         print(self.User_Coins)
+        self.Coins_Label = Label(self.Coins_Frame, text='Coins: ' + str(self.User_Coins), font=('Consolas', 15))
+        self.Coins_Label.place(width=160, height=50, x=0, y=0)
         #print('wip')
     # ---------- ↑ 加载金币和更新 ↑ ---------- #
     
@@ -266,8 +269,8 @@ class game_system:
     def coins_run(self):
         if self.coins_running_state != 'running': return
         self.update_coins()
-        game.after(100,Game.coins_run)
-        print(self.User_Coins)
+        game.after(1000, Game.coins_run)
+        #print(self.User_Coins)
     # ---------- ↑ 游戏每帧的运行事件 ↑ ---------- #
         
 Game = game_system()
